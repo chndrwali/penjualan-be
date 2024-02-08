@@ -22,16 +22,18 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // Routes
 const productRoutes = require('./routes/products');
-const usersRouter = require('./routes/users')
-const authRouter = require('./routes/auth')
-const orderRouter = require('./routes/orders')
+const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
+const orderRouter = require('./routes/orders');
+const customizeRouter = require('./routes/customize');
 // Add more routes as needed
 
 // Use routes
 app.use('/api/products', productRoutes);
 app.use('/api/user', usersRouter);
 app.use('/api', authRouter);
-app.use('/api/order', orderRouter)
+app.use('/api/order', orderRouter);
+app.use('/api/customize', customizeRouter);
 // Add more routes as needed
 
 // Error handling middleware
