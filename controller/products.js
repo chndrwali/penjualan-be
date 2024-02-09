@@ -199,23 +199,23 @@ class ProductsController {
   }
 
   async getSingleProduct(req, res) {
-    const { id } = req.body;
+    const { id } = req.params; // Mengambil ID dari parameter rute
 
     try {
-      const product = await Product.findById(id)
-        .populate("category", "name")
-        .populate("ratingsReviews.user", "name email");
+        const product = await Product.findById(id)
+            .populate("category", "name")
+            .populate("ratingsReviews.user", "name email");
 
-      if (!product) {
-        return res.status(404).json({ error: "Product not found" });
-      }
+        if (!product) {
+            return res.status(404).json({ error: "Product not found" });
+        }
 
-      return res.json({ product });
+        return res.json({ product });
     } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
+        console.error(err);
+        return res.status(500).json({ error: "Internal server error" });
     }
-  }
+}
 }
 
 module.exports = new ProductsController();
