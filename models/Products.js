@@ -10,7 +10,7 @@ const productSchema = new Schema(
     description: {
       type: String,
       required: true,
-    },
+    },dasdad
     price: {
       type: Number,
       required: true,
