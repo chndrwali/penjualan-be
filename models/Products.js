@@ -39,10 +39,10 @@ const productSchema = new Schema(
       {
         review: String,
         user: { type: Schema.Types.ObjectId, ref: "User" },
-        rating: String,
+        rating: Number,
         createdAt: {
           type: Date,
-          default: Date.now(),
+          default: Date.now,
         },
       },
     ],

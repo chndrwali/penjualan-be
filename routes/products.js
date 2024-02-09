@@ -1,4 +1,3 @@
-// routes/products.js
 const express = require("express");
 const router = express.Router();
 const productController = require("../controller/products");
@@ -22,8 +21,8 @@ router.post("/wish-product", productController.getWishProduct);
 router.post("/cart-product", productController.getCartProduct);
 
 router.post("/add-product", upload.array("images", 2), productController.postAddProduct);
-router.post("/edit-product", productController.postEditProduct);
-router.post("/delete-product", productController.getDeleteProduct);
+router.put("/edit-product", productController.postEditProduct);
+router.delete("/delete-product", productController.getDeleteProduct);
 router.post("/single-product", productController.getSingleProduct);
 
 router.post("/add-review", productController.postAddReview);

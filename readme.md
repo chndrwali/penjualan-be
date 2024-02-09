@@ -18,7 +18,7 @@ Akses di http://localhost:3000/
 
 <br/>
 
-### USER
+### DOKUMENTASI USER
 
 `GET` ALL USER
 
@@ -32,7 +32,7 @@ http://localhost:3000/api/users/all-user
 http://localhost:3000/api/users/add-user
 ```
 
-test Body JSON
+payload JSON:
 
 ```
 {
@@ -58,7 +58,7 @@ test Body JSON
 http://localhost:3000/api/users/single-user
 ```
 
-Test Body JSON
+payload JSON:
 
 ```
 {
@@ -72,7 +72,7 @@ Test Body JSON
 http://localhost:3000/api/users/edit-user
 ```
 
-Test Body JSON
+payload JSON:
 
 ```
 {
@@ -89,7 +89,7 @@ Test Body JSON
 http://localhost:3000/api/users/change-password
 ```
 
-Test Body JSON
+payload JSON:
 
 ```
 {
@@ -106,9 +106,44 @@ Test Body JSON
 http://localhost:3000/api/users/delete-user
 ```
 
+payload JSON:
+
 ```
 {
   "uId": "65c5e069b3808d80eea20f38"
+}
+
+```
+
+### DOKUMENTASI PRODUCTS
+
+`GET` ALL PRODUCT
+
+```
+http://localhost:3000/api/products/all-product
+```
+
+`POST` ADD PRODUCT
+
+```
+http://localhost:3000/api/products/add-product
+```
+
+Payload JSON:
+
+```
+{
+  "name": "Sepatu Olahraga",
+  "description": "Sepatu olahraga nyaman untuk berlari dan berlatih.",
+  "price": 50,
+  "quantity": 100,
+  "category": "6123456789abcdef01234567", // ID kategori produk yang valid
+  "offer": "Diskon 10% untuk pelanggan baru",
+  "status": "available",
+  "images": [
+    "image1.jpg",
+    "image2.jpg"
+  ]
 }
 
 ```
