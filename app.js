@@ -3,6 +3,14 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+
+// Middleware untuk membuat folder upload jika belum ada
+const createAllFolders = require('./config/uploadFolderCreatScript');
+
+// Memanggil fungsi untuk membuat folder upload
+createAllFolders();
 
 // Load environment variables
 dotenv.config();
@@ -14,6 +22,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
+app.use(cookieParser());
+app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
@@ -28,17 +38,15 @@ const orderRouter = require('./routes/orders');
 const customizeRouter = require('./routes/customize');
 const categoriesRouter = require('./routes/categories');
 const midtransRouter = require('./routes/midtrans');
-// Add more routes as needed
 
 // Use routes
 app.use('/api/products', productRoutes);
-app.use('/api/user', usersRouter);
-app.use('/api', authRouter);
-app.use('/api/order', orderRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/orders', orderRouter);
 app.use('/api/customize', customizeRouter);
 app.use('/api/categories', categoriesRouter);
-app.use('/api/', midtransRouter);
-// Add more routes as needed
+app.use('/api/midtrans', midtransRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
