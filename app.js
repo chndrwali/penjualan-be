@@ -26,6 +26,8 @@ const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const orderRouter = require('./routes/orders');
 const customizeRouter = require('./routes/customize');
+const categoriesRouter = require('./routes/categories');
+const midtransRouter = require('./routes/midtrans');
 // Add more routes as needed
 
 // Use routes
@@ -34,6 +36,8 @@ app.use('/api/user', usersRouter);
 app.use('/api', authRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/customize', customizeRouter);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/', midtransRouter);
 // Add more routes as needed
 
 // Error handling middleware
