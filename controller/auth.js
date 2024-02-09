@@ -75,7 +75,6 @@ class Auth {
     }
   }
 
-  /* User Login/Signin controller */
   async postSignin(req, res) {
     try {
       const { email, password } = req.body;

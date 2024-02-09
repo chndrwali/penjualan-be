@@ -289,3 +289,59 @@ Payload JSON:
 }
 
 ```
+
+### DOKUMENTASI AUTH
+
+`POST` GET ALL USER
+
+```
+http://localhost:3000/api/auth/all-user
+```
+
+`POST` IS ADMIN
+
+```
+http://localhost:3000/api/auth/isadmin
+```
+
+Payload JSON:
+
+```
+{
+    "loggedInUserId": "65c5e033b3808d80eea20f36"
+}
+```
+
+`POST` SIGN IN
+
+```
+http://localhost:3000/api/auth/signin
+```
+
+Payload JSON:
+
+```
+{
+    "email": "test@gmail.com",
+    "password": "candradasd123"
+}
+
+```
+
+`POST` SIGN UP
+
+```
+http://localhost:3000/api/auth/signup
+```
+
+Payload JSON:
+
+```
+{
+    "name": "chndrwali",
+    "email": "chndrwali@gmail.com",
+    "password": "candra123",
+    "cPassword": "candra123"
+}
+
+```
