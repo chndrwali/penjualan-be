@@ -38,7 +38,7 @@ const productSchema = new Schema(
     ratingsReviews: [
       {
         review: String,
-        user: { type: Schema.Types.ObjectId, ref: "User" },
+        user: { type: Schema.Types.ObjectId, ref: "users" },
         rating: Number,
         createdAt: {
           type: Date,
