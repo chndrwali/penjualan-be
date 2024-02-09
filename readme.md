@@ -18,7 +18,7 @@ Akses di http://localhost:3000/
 
 ### API
 
-berikut adalah dokumentasi
+<br>
 
 ### USER
 
@@ -28,6 +28,7 @@ berikut adalah dokumentasi
 http://localhost:3000/api/users/all-user
 ```
 
+<br>
 `POST` ADD USER
 
 ```
@@ -54,6 +55,7 @@ test Body JSON
 
 ```
 
+<br>
 `POST` GET SINGLE USER
 
 ```
@@ -68,6 +70,7 @@ Test Body JSON
 }
 ```
 
+<br>
 `PUT` EDIT USER
 
 ```
@@ -84,3 +87,5 @@ Test Body JSON
 }
 
 ```
+
+<br>
