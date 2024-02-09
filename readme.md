@@ -1,5 +1,3 @@
-## Dokumentasi
-
 ### Instal Dependensi
 
 masukan perintah di terminal/cmd
@@ -16,7 +14,7 @@ npm run start-dev
 
 Akses di http://localhost:3000/
 
-### API
+### DOKUMENTASI API
 
 <br/>
 
@@ -28,7 +26,6 @@ Akses di http://localhost:3000/
 http://localhost:3000/api/users/all-user
 ```
 
-<br/>
 `POST` ADD USER
 
 ```
@@ -55,7 +52,6 @@ test Body JSON
 
 ```
 
-<br/>
 `POST` GET SINGLE USER
 
 ```
@@ -70,7 +66,6 @@ Test Body JSON
 }
 ```
 
-<br/>
 `PUT` EDIT USER
 
 ```
@@ -88,4 +83,32 @@ Test Body JSON
 
 ```
 
-<br />
+`PUT` Change Password
+
+```
+http://localhost:3000/api/users/change-password
+```
+
+Test Body JSON
+
+```
+{
+  "uId": "65c5e033b3808d80eea20f36",
+  "oldPassword": "admin123",
+  "newPassword": "admin"
+}
+
+```
+
+`PUT` Delete User
+
+```
+http://localhost:3000/api/users/delete-user
+```
+
+```
+{
+  "uId": "65c5e069b3808d80eea20f38"
+}
+
+```
