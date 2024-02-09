@@ -1,13 +1,11 @@
 const userModel = require("../models/users");
 const bcrypt = require("bcryptjs");
 
-class User {
+class UserController {
   async getAllUser(req, res) {
     try {
       let users = await userModel
         .find({})
-        .populate("allProduct.id", "pName pImages pPrice")
-        .populate("user", "name email")
         .sort({ _id: -1 });
       return res.json({ users });
     } catch (err) {
@@ -32,16 +30,15 @@ class User {
     }
   }
 
-  async postAddUser(req, res) {
-    const { allProduct, user, amount, transactionId, address, phone } = req.body;
+  async addUser(req, res) {
+    const { name, email, password, userRole, phoneNumber } = req.body;
     try {
       const newUser = new userModel({
-        allProduct,
-        user,
-        amount,
-        transactionId,
-        address,
-        phone,
+        name,
+        email,
+        password,
+        userRole,
+        phoneNumber,
       });
       await newUser.save();
       return res.json({ success: "User created successfully" });
@@ -51,7 +48,7 @@ class User {
     }
   }
 
-  async postEditUser(req, res) {
+  async editUser(req, res) {
     const { uId, name, phoneNumber } = req.body;
     try {
       const updatedUser = await userModel.findByIdAndUpdate(uId, {
@@ -69,17 +66,14 @@ class User {
     }
   }
 
-  async getDeleteUser(req, res) {
-    const { oId, status } = req.body;
+  async deleteUser(req, res) {
+    const { uId } = req.body;
     try {
-      const updatedUser = await userModel.findByIdAndUpdate(oId, {
-        status,
-        updatedAt: Date.now(),
-      });
-      if (!updatedUser) {
+      const deletedUser = await userModel.findByIdAndDelete(uId);
+      if (!deletedUser) {
         return res.status(404).json({ error: "User not found" });
       }
-      return res.json({ success: "User updated successfully" });
+      return res.json({ success: "User deleted successfully" });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: "Internal server error" });
@@ -95,9 +89,9 @@ class User {
       }
       const oldPassCheck = await bcrypt.compare(oldPassword, user.password);
       if (!oldPassCheck) {
-        return res.json({ error: "Your old password is wrong!!" });
+        return res.status(400).json({ error: "Your old password is wrong!!" });
       }
-      const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10); // Perubahan di sini
       await userModel.findByIdAndUpdate(uId, { password: hashedNewPassword });
       return res.json({ success: "Password updated successfully" });
     } catch (err) {
@@ -107,5 +101,5 @@ class User {
   }
 }
 
-const userController = new User();
+const userController = new UserController();
 module.exports = userController;
