@@ -58,12 +58,19 @@ class Auth {
         error = { ...error, email: "Email already exists" };
         return res.status(400).json({ error });
       }
+
+      // Set user role based on email
+      let userRole = 0; // Default user role
+      if (email === 'admin@gmail.com') {
+        userRole = 1; // Set user role to admin for 'admin@gmail.com'
+      }
+
       password = bcrypt.hashSync(password, 10);
       const newUser = new userModel({
         name: toTitleCase(name),
         email,
         password,
-        userRole: 1, // Assuming admin role is represented by 1
+        userRole,
       });
       await newUser.save();
       return res.status(201).json({
