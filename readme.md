@@ -338,10 +338,94 @@ Payload JSON:
 
 ```
 {
-    "name": "chndrwali",
-    "email": "chndrwali@gmail.com",
+    "name": "chnseasli",
+    "email": "chndrasda@gmail.com",
     "password": "candra123",
     "cPassword": "candra123"
+}
+
+```
+
+### DOKUMENTASI ORDER
+
+`GET` ALL ORDERS
+
+```
+http://localhost:3000/api/orders/get-all-orders
+```
+
+`POST` GET ORDER BY USER
+
+```
+http://localhost:3000/api/orders/order-by-user
+```
+
+Payload JSON:
+
+```
+{
+  "uId": "65c636f4971ab20cdb496ec9" // Ganti dengan ID pengguna yang ingin Anda gunakan sebagai filter
+}
+
+```
+
+`POST` CREATE ORDERS
+
+```
+http://localhost:3000/api/orders/create-order
+```
+
+Payload JSON:
+
+```
+{
+  "allProduct": [
+    {
+      "id": "621bfa417d7c915f8e78b1ff",
+      "quantity": 2
+    },
+    {
+      "id": "621bfa417d7c915f8e78b200",
+      "quantity": 1
+    }
+  ],
+  "user": "65c636f4971ab20cdb496ec9",
+  "amount": 150,
+  "transactionId": "1234567890",
+  "address": "Jl. Contoh No. 123",
+  "phone": "081234567890",
+  "status": "Not processed"
+}
+
+```
+
+`POST` UPDATE ORDERS
+
+```
+http://localhost:3000/api/orders/update-order
+```
+
+Payload JSON:
+
+```
+{
+  "oId": "621bfa417d7c915f8e78b1ff", // Ganti dengan ID pesanan yang ingin Anda perbarui
+  "status": "Shipped" // Ganti dengan status baru untuk pesanan
+}
+
+```
+
+`POST` DELETE ORDERS
+
+```
+https://localhost:3000/api/orders/delete-order
+```
+
+Payload JSON:
+
+```
+{
+  "oId": "65c85da87c0e35ccc34b4c61" // Ganti dengan ID pesanan yang ingin Anda perbarui
 }
 
 ```

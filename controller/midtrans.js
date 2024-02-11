@@ -24,7 +24,7 @@ class MidtransPayment {
       const transaction = await core.charge({
         payment_type: 'credit_card',
         transaction_details: {
-          order_id: 'ORDER-123', // Ganti dengan ID pesanan Anda
+          order_id: G537097157, // Ganti dengan ID pesanan Anda
           gross_amount: amountTotal,
         },
         credit_card: {
