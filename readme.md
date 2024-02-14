@@ -429,3 +429,27 @@ Payload JSON:
 }
 
 ```
+
+### DOKUMENTASI BRAINTREE
+
+`POST` GET TOKEN
+
+```
+http://localhost:3000/api/braintree/get-token
+```
+
+`POST` GET PAYMENT
+
+```
+http://localhost:3000/api/braintree/payment
+```
+
+Payload JSON:
+
+```
+{
+  "amountTotal": "100.00", // Jumlah total pembayaran dalam format string
+  "paymentMethod": "fake-valid-nonce" // Metode pembayaran nonce (contoh: fake-valid-nonce)
+}
+
+```
