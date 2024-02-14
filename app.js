@@ -37,7 +37,7 @@ const authRouter = require('./routes/auth');
 const orderRouter = require('./routes/orders');
 const customizeRouter = require('./routes/customize');
 const categoriesRouter = require('./routes/categories');
-const midtransRouter = require('./routes/midtrans');
+const braintreeRouter = require('./routes/braintree');
 
 // Use routes
 app.use('/api/products', productRoutes);
@@ -46,7 +46,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/customize', customizeRouter);
 app.use('/api/categories', categoriesRouter);
-app.use('/api/midtrans', midtransRouter);
+app.use('/api/braintree', braintreeRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
