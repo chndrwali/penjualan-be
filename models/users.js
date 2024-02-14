@@ -11,8 +11,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true, // Memindahkan index ke sini
-      match: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, // Menggunakan ekspresi reguler yang lebih sederhana
+      index: { unique: true },
+      match: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
     },
     password: {
       type: String,
@@ -23,22 +23,22 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     phoneNumber: {
-      type: String, // Mengubah tipe data menjadi String karena nomor telepon dapat berisi karakter selain angka
+      type: Number,
     },
     userImage: {
       type: String,
       default: "user.png",
     },
     verified: {
-      type: Boolean, // Mengubah tipe data menjadi Boolean karena verified hanya memiliki dua nilai: true atau false
-      default: false, // Mengubah nilai default menjadi false
+      type: String,
+      default: false,
     },
     secretKey: {
       type: String,
       default: null,
     },
     history: {
-      type: [Object], // Mengubah tipe data menjadi Array of Objects
+      type: Array,
       default: [],
     },
   },

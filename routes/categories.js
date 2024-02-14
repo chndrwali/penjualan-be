@@ -21,13 +21,13 @@ router.post(
   "/add-category",
   loginCheck,
   upload.single("cImage"),
-  categoryController.createCategory
+  categoryController.postAddCategory
 );
-router.post("/edit-category", loginCheck, categoryController.updateCategory);
+router.post("/edit-category", loginCheck, categoryController.postEditCategory);
 router.post(
   "/delete-category",
   loginCheck,
-  categoryController.deleteCategory
+  categoryController.getDeleteCategory
 );
 
 module.exports = router;

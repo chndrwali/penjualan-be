@@ -36,19 +36,13 @@ payload JSON:
 
 ```
 {
-  "name": "user",
-  "email": "user@gmail.com",
-  "password": "user123",
+  "name": "John Doe",
+  "email": "johndoe@example.com",
+  "password": "password123",
   "userRole": 1,
-  "phoneNumber": "089652648221",
-  "userImage": "user.png",
-  "verified": true,
-  "secretKey": "sasd",
-  "history": [
-    {"action": "login", "timestamp": "2024-02-10T10:00:00Z"},
-    {"action": "logout", "timestamp": "2024-02-10T18:00:00Z"}
-  ]
+  "phoneNumber": "1234567890"
 }
+
 
 ```
 
@@ -126,7 +120,15 @@ http://localhost:3000/api/products/all-product
 `GET` SINGLE PRODUCT
 
 ```
-http://localhost:3000/api/products/single-product/65c61c2bae1c0e887edfb901
+http://localhost:3000/api/products/single-product
+```
+
+Payload JSON
+
+```
+{
+    "pId": "65c61ff68a8123eaf4005064"
+}
 ```
 
 `POST` ADD PRODUCT
@@ -164,8 +166,9 @@ Payload JSON:
 
 ```
 {
-  "category": "6123456789abcdef01234567"
+    "catId": "65ccc4e276bf6435cfecd767"
 }
+
 
 ```
 
@@ -194,8 +197,9 @@ Payload JSON:
 
 ```
 {
-  "id": "65c614e9ae1c0e887edfb8f6"
+    "productArray": ["65ccc103d6460a623aa94ff9", "65c61ff68a8123eaf4005064", "65c61ff58a8123eaf4005062"]
 }
+
 
 ```
 
@@ -209,8 +213,9 @@ Payload JSON:
 
 ```
 {
-  "id": "65c614e9ae1c0e887edfb8f6"
+    "productArray": ["65ccc103d6460a623aa94ff9", "65c61ff68a8123eaf4005064", "65c61ff58a8123eaf4005062"]
 }
+
 ```
 
 `PUT` PUT EDIT PRODUCT
@@ -223,19 +228,16 @@ Payload JSON:
 
 ```
 {
-   "id": "65c614e9ae1c0e887edfb8f6",
-  "name": "Kusen Kayu",
-  "description": "Sepatu olahraga nyaman untuk berlari dan berlatih.",
-  "price": 50,
-  "quantity": 21,
-  "category": "6123456789abcdef01234567", // ID kategori produk yang valid
-  "offer": "Diskon 10% untuk pelanggan baru",
-  "status": "available",
-  "images": [
-    "image1.jpg",
-    "image2.jpg"
-  ]
+    "pId": "65ccc103d6460a623aa94ff9",
+    "pName": "Nama produk baru",
+    "pDescription": "Deskripsi produk yang baru",
+    "pPrice": "1000",
+    "pQuantity": "22",
+    "pCategory": "65ccc4e276bf6435cfecd767",
+    "pOffer": "20%",
+    "pStatus": "Status baru"
 }
+
 
 ```
 
@@ -249,8 +251,9 @@ Payload JSON:
 
 ```
 {
-   "id": "65c614e9ae1c0e887edfb8f6"
+   "pId": "65c61c2bae1c0e887edfb901"
 }
+
 
 ```
 
@@ -295,7 +298,7 @@ Payload JSON:
 `POST` GET ALL USER
 
 ```
-http://localhost:3000/api/auth/all-user
+http://localhost:3000/api/auth/user
 ```
 
 `POST` IS ADMIN

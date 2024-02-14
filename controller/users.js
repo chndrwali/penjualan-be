@@ -4,101 +4,134 @@ const bcrypt = require("bcryptjs");
 class UserController {
   async getAllUser(req, res) {
     try {
-      let users = await userModel
+      let Users = await userModel
         .find({})
         .sort({ _id: -1 });
-      return res.json({ users });
+      if (Users) {
+        return res.json({ Users });
+      }
     } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
+      console.log(err);
     }
   }
 
   async getSingleUser(req, res) {
-    const { uId } = req.body;
-    try {
-      const user = await userModel
-        .findById(uId)
-        .select("name email phoneNumber userImage updatedAt createdAt");
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
+    let { uId } = req.body;
+    if (!uId) {
+      return res.json({ error: "All filled must be required" });
+    } else {
+      try {
+        let User = await userModel
+          .findById(uId)
+          .select("name email phoneNumber userImage updatedAt createdAt");
+        if (User) {
+          return res.json({ User });
+        }
+      } catch (err) {
+        console.log(err);
       }
-      return res.json({ user });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
     }
   }
 
-  async addUser(req, res) {
-    const { name, email, password, userRole, phoneNumber } = req.body;
+  async postAddUser(req, res) {
     try {
+      const { name, email, password, userRole, phoneNumber } = req.body;
+      const existingUser = await userModel.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ error: "User already exists" });
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = new userModel({
         name,
         email,
-        password,
+        password: hashedPassword,
         userRole,
         phoneNumber,
       });
       await newUser.save();
       return res.json({ success: "User created successfully" });
     } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
+      console.log(err);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   }
 
-  async editUser(req, res) {
-    const { uId, name, phoneNumber } = req.body;
-    try {
-      const updatedUser = await userModel.findByIdAndUpdate(uId, {
-        name,
-        phoneNumber,
-        updatedAt: Date.now(),
-      });
-      if (!updatedUser) {
-        return res.status(404).json({ error: "User not found" });
+  async postEditUser(req, res) {
+    let { uId, name, phoneNumber } = req.body;
+    if (!uId || !name || !phoneNumber) {
+      return res.json({ message: "All fields must be required" });
+    } else {
+      try {
+        let currentUser = await userModel.findByIdAndUpdate(uId, {
+          name: name,
+          phoneNumber: phoneNumber,
+          updatedAt: Date.now(),
+        });
+        if (currentUser) {
+          return res.json({ success: "User updated successfully" });
+        } else {
+          return res.json({ error: "User not found" });
+        }
+      } catch (err) {
+        console.log(err);
+        return res.json({ error: "Internal server error" });
       }
-      return res.json({ success: "User updated successfully" });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
     }
   }
 
-  async deleteUser(req, res) {
-    const { uId } = req.body;
-    try {
-      const deletedUser = await userModel.findByIdAndDelete(uId);
-      if (!deletedUser) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      return res.json({ success: "User deleted successfully" });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
+  async getDeleteUser(req, res) {
+    let { uId } = req.body;
+    if (!uId) {
+        return res.json({ message: "User ID must be required" });
+    } else {
+        try {
+            let deletedUser = await userModel.findByIdAndDelete(oId);
+            if (deletedUser) {
+                return res.json({ success: "User deleted successfully" });
+            } else {
+                return res.json({ error: "Failed to delete user" });
+            }
+        } catch (err) {
+            console.log(err);
+            return res.json({ error: "Internal server error" });
+        }
     }
-  }
+}
+
 
   async changePassword(req, res) {
-    const { uId, oldPassword, newPassword } = req.body;
-    try {
-      const user = await userModel.findById(uId);
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
+    let { uId, oldPassword, newPassword } = req.body;
+    if (!uId || !oldPassword || !newPassword) {
+      return res.json({ message: "All fields must be required" });
+    } else {
+      try {
+        const data = await userModel.findById(uId);
+        if (!data) {
+          return res.json({ error: "Invalid user" });
+        } else {
+          const oldPassCheck = await bcrypt.compare(oldPassword, data.password);
+          if (oldPassCheck) {
+            newPassword = bcrypt.hashSync(newPassword, 10);
+            let passChange = await userModel.findByIdAndUpdate(uId, {
+              password: newPassword,
+            });
+            if (passChange) {
+              return res.json({ success: "Password updated successfully" });
+            } else {
+              return res.json({ error: "Failed to update password" });
+            }
+          } else {
+            return res.json({
+              error: "Your old password is wrong!!",
+            });
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        return res.json({ error: "Internal server error" });
       }
-      const oldPassCheck = await bcrypt.compare(oldPassword, user.password);
-      if (!oldPassCheck) {
-        return res.status(400).json({ error: "Your old password is wrong!!" });
-      }
-      const hashedNewPassword = await bcrypt.hash(newPassword, 10); // Perubahan di sini
-      await userModel.findByIdAndUpdate(uId, { password: hashedNewPassword });
-      return res.json({ success: "Password updated successfully" });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Internal server error" });
     }
-  }
+  }  
 }
 
 const userController = new UserController();

@@ -4,42 +4,39 @@ const userModel = require("../models/users");
 
 exports.loginCheck = (req, res, next) => {
   try {
-    let token = req.headers.authorization;
-    if (!token || !token.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
+    let token = req.headers.token;
     token = token.replace("Bearer ", "");
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.userDetails = decoded;
+    decode = jwt.verify(token, JWT_SECRET);
+    req.userDetails = decode;
     next();
   } catch (err) {
-    console.error(err);
-    return res.status(401).json({ error: "Unauthorized" });
+    res.json({
+      error: "You must be logged in",
+    });
   }
 };
 
 exports.isAuth = (req, res, next) => {
-  try {
-    const { loggedInUserId } = req.body;
-    if (!loggedInUserId || loggedInUserId !== req.userDetails._id) {
-      return res.status(403).json({ error: "Forbidden" });
-    }
-    next();
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Internal server error" });
+  let { loggedInUserId } = req.body;
+  if (
+    !loggedInUserId ||
+    !req.userDetails._id ||
+    loggedInUserId != req.userDetails._id
+  ) {
+    res.status(403).json({ error: "You are not authenticate" });
   }
+  next();
 };
 
 exports.isAdmin = async (req, res, next) => {
   try {
-    const reqUser = await userModel.findById(req.body.loggedInUserId);
-    if (!reqUser || reqUser.userRole !== 1) { // Assuming admin role is represented by 1
-      return res.status(403).json({ error: "Access denied" });
+    let reqUser = await userModel.findById(req.body.loggedInUserId);
+    // If user role 0 that's mean not admin it's customer
+    if (reqUser.userRole === 0) {
+      res.status(403).json({ error: "Access denied" });
     }
     next();
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Internal server error" });
+  } catch {
+    res.status(404);
   }
 };

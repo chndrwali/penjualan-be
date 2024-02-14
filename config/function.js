@@ -8,25 +8,31 @@ exports.toTitleCase = function (str) {
 };
 
 exports.validateEmail = function (mail) {
-  return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(mail);
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 exports.emailCheckInDatabase = async function (email) {
-  try {
-    const user = await userModel.findOne({ email: email });
-    return !!user;
-  } catch (err) {
-    console.error(err);
-    return false;
-  }
+  let user = await userModel.findOne({ email: email });
+  user.exec((err, data) => {
+    if (!data) {
+      return false;
+    } else {
+      return true;
+    }
+  });
 };
 
 exports.phoneNumberCheckInDatabase = async function (phoneNumber) {
-  try {
-    const user = await userModel.findOne({ phoneNumber: phoneNumber });
-    return !!user;
-  } catch (err) {
-    console.error(err);
-    return false;
-  }
+  let user = await userModel.findOne({ phoneNumber: phoneNumber });
+  user.exec((err, data) => {
+    if (data) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 };

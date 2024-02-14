@@ -21,5 +21,5 @@ const categorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const categoryModel = mongoose.model("Category", categorySchema); // Mengubah nama model menjadi "Category"
+const categoryModel = mongoose.model("categories", categorySchema);
 module.exports = categoryModel;

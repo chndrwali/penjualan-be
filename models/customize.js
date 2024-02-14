@@ -13,5 +13,5 @@ const customizeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const customizeModel = mongoose.model("Customize", customizeSchema); 
+const customizeModel = mongoose.model("customizes", customizeSchema);
 module.exports = customizeModel;

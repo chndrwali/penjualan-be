@@ -1,63 +1,100 @@
+const { toTitleCase } = require("../config/function");
 const categoryModel = require("../models/categories");
+const fs = require("fs");
 
 class Category {
   async getAllCategories(req, res) {
     try {
-      let categories = await categoryModel.find({});
-      if (categories) {
-        return res.json({ categories });
+      let Categories = await categoryModel.find({}).sort({ _id: -1 });
+      if (Categories) {
+        return res.json({ Categories });
       }
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ error: "Internal server error" });
     }
   }
 
-  async createCategory(req, res) {
-    const { cName, cDescription, cStatus } = req.body;
+  async postAddCategory(req, res) {
+    let { cName, cDescription, cStatus } = req.body;
+    let cImage = req.file.filename;
+    const filePath = `./public/uploads/categories/${cImage}`;
+
+    if (!cName || !cDescription || !cStatus || !cImage) {
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.log(err);
+            }
+            return res.json({ error: "All fields must be required" });
+        });
+    } else {
+        cName = toTitleCase(cName);
+        try {
+            let checkCategoryExists = await categoryModel.findOne({ cName: cName });
+            if (checkCategoryExists) {
+                fs.unlink(filePath, (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    return res.json({ error: "Category already exists" });
+                });
+            } else {
+                let newCategory = new categoryModel({
+                    cName,
+                    cDescription,
+                    cStatus,
+                    cImage,
+                });
+                await newCategory.save(); // Menghapus callback di sini
+                return res.json({ success: "Category created successfully" });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+}
+
+  async postEditCategory(req, res) {
+    let { cId, cDescription, cStatus } = req.body;
+    if (!cId || !cDescription || !cStatus) {
+      return res.json({ error: "All fields must be required" });
+    }
     try {
-      const newCategory = new categoryModel({
-        cName,
+      let editCategory = categoryModel.findByIdAndUpdate(cId, {
         cDescription,
         cStatus,
+        updatedAt: Date.now(),
       });
-      const savedCategory = await newCategory.save();
-      if (savedCategory) {
-        return res.json({ success: "Category created successfully" });
+      let edit = await editCategory.exec();
+      if (edit) {
+        return res.json({ success: "Category edited successfully" });
       }
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ error: "Internal server error" });
     }
   }
 
-  async updateCategory(req, res) {
-    const { categoryId, cName, cDescription, cStatus } = req.body;
-    try {
-      const updatedCategory = await categoryModel.findByIdAndUpdate(
-        categoryId,
-        { cName, cDescription, cStatus },
-        { new: true }
-      );
-      if (updatedCategory) {
-        return res.json({ success: "Category updated successfully" });
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  }
+  async getDeleteCategory(req, res) {
+    let { cId } = req.body;
+    if (!cId) {
+      return res.json({ error: "Category ID must be required" });
+    } else {
+      try {
+        let deletedCategoryFile = await categoryModel.findById(cId);
+        const filePath = `./public/uploads/categories/${deletedCategoryFile.cImage}`;
 
-  async deleteCategory(req, res) {
-    const { categoryId } = req.body;
-    try {
-      const deletedCategory = await categoryModel.findByIdAndDelete(categoryId);
-      if (deletedCategory) {
-        return res.json({ success: "Category deleted successfully" });
+        let deleteCategory = await categoryModel.findByIdAndDelete(cId);
+        if (deleteCategory) {
+          // Delete Image from uploads -> categories folder
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              console.log(err);
+            }
+            return res.json({ success: "Category deleted successfully" });
+          });
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ error: "Internal server error" });
     }
   }
 }
