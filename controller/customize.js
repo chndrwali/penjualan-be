@@ -36,29 +36,30 @@ class Customize {
   }
 
   async deleteSlideImage(req, res) {
-    let { id } = req.body;
-    if (!id) {
-      return res.json({ error: "All field required" });
-    } else {
-      try {
+    let { id } = req.params; // Mengambil ID dari parameter URL
+    try {
         let deletedSlideImage = await customizeModel.findById(id);
-        const filePath = `../server/public/uploads/customize/${deletedSlideImage.slideImage}`;
+        if (!deletedSlideImage) {
+            return res.status(404).json({ error: "Image not found" });
+        }
 
+        const filePath = `../server/public/uploads/customize/${deletedSlideImage.slideImage}`;
         let deleteImage = await customizeModel.findByIdAndDelete(id);
         if (deleteImage) {
-          // Delete Image from uploads -> customizes folder
-          fs.unlink(filePath, (err) => {
-            if (err) {
-              console.log(err);
-            }
-            return res.json({ success: "Image deleted successfully" });
-          });
+            // Hapus gambar dari direktori
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+                return res.json({ success: "Image deleted successfully" });
+            });
         }
-      } catch (err) {
+    } catch (err) {
         console.log(err);
-      }
+        return res.status(500).json({ error: "Internal server error" });
     }
-  }
+}
+
 
   async getAllData(req, res) {
     try {

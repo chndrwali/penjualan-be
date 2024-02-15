@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get("/get-slide-image", customizeController.getImages);
-router.post("/delete-slide-image", customizeController.deleteSlideImage);
+router.delete("/delete-slide-image/:id", customizeController.deleteSlideImage);
 router.post(
   "/upload-slide-image",
   upload.single("slideImage"),
