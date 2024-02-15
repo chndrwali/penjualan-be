@@ -497,3 +497,55 @@ Payload JSON:
   "id": "65cdb690c287de4c9d808032"
 }
 ```
+
+### DOKUMENTASI CATEGORIES
+
+`GET` ALL CATEGORY
+
+```
+http://localhost:3000/api/categories/all-category
+```
+
+`POST` ADD CATEGORIES
+
+```
+http://localhost:3000/api/products/add-product
+```
+
+Payload JSON:
+
+```
+key: Images, pName, pDescription, pPrice, pQuantity, pCategory, pOffer, pStatus
+```
+
+`POST` EDIT CATEGORIES
+
+```
+http://localhost:3000/api/categories/edit-category
+```
+
+payload JSON:
+
+```
+{
+    "cId": "65ccc0add6460a623aa94ff6",
+    "cDescription": "Deskripsi yang diperbarui",
+    "cStatus": "Status yang diperbarui"
+}
+
+```
+
+`POST` DELETE CATEGORIES
+
+```
+http://localhost:3000/api/categories/delete-category
+```
+
+Payload JSON
+
+```
+{
+    "cId": "65ccc0add6460a623aa94ff6"
+}
+
+```
