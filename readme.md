@@ -456,3 +456,44 @@ Payload JSON:
 }
 
 ```
+
+### DOKUMENTASI CUSTOMIZE
+
+`GET` Slide IMAGES
+
+```
+http://localhost:3000/api/customize/get-slide-image
+```
+
+`GET` GET DASHBOARD DATA
+
+```
+http://localhost:3000/api/customize/dashboard-data
+```
+
+`POST` UPLOAD IMAGES
+
+```
+http://localhost:3000/api/customize/upload-slide-image
+```
+
+Payload JSON:
+
+```
+Key: slideImages
+Value: Select File
+```
+
+`POST` DELETE IMAGES
+
+```
+http://localhost:3000/api/customize/delete-slide-image
+```
+
+Payload JSON:
+
+```
+{
+  "id": "65cdb690c287de4c9d808032"
+}
+```

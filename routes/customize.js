@@ -21,6 +21,6 @@ router.post(
   upload.single("slideImage"),
   customizeController.uploadSlideImage
 );
-router.post("/dashboard-data", customizeController.getAllData);
+router.get("/dashboard-data", customizeController.getAllData);
 
 module.exports = router;

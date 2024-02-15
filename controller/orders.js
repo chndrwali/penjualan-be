@@ -70,18 +70,23 @@ class Order {
   async postUpdateOrder(req, res) {
     let { oId, status } = req.body;
     if (!oId || !status) {
-      return res.json({ message: "All filled must be required" });
+      return res.json({ message: "All fields must be required" });
     } else {
-      let currentOrder = orderModel.findByIdAndUpdate(oId, {
-        status: status,
-        updatedAt: Date.now(),
-      });
-      currentOrder.exec((err, result) => {
-        if (err) console.log(err);
-        return res.json({ success: "Order updated successfully" });
-      });
+      try {
+        let currentOrder = await orderModel.findByIdAndUpdate(oId, {
+          status: status,
+          updatedAt: Date.now(),
+        });
+        if (currentOrder) {
+          return res.json({ success: "Order updated successfully" });
+        }
+      } catch (err) {
+        console.log(err);
+        return res.json({ error: "Failed to update order" });
+      }
     }
   }
+  
 
   async postDeleteOrder(req, res) {
     let { oId } = req.body;
