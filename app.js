@@ -24,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(cors());
+app.use(express.static("public"));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)

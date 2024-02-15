@@ -267,15 +267,16 @@ Payload JSON:
 
 ```
 {
-  "productId": "6123456789abcdef01234567", // Ganti dengan ID produk yang valid
-  "userId": "65c61c2bae1c0e887edfb901", // Ganti dengan ID pengguna yang valid
-  "rating": "5", // Nilai peringkat (misalnya, 1, 2, 3, 4, atau 5)
-  "review": "This is a great product!" // Ulasan tentang produk
+  "pId": "65ccc103d6460a623aa94ff9",
+  "uId": "65c88f0b5666352cde3f719a",
+  "rating": "5",
+  "review": "This is a great product!"
 }
+
 
 ```
 
-`POST` DELETE REVIEW PRODUCT
+`DELETE` DELETE REVIEW PRODUCT
 
 ```
 http://localhost:3000/api/products/delete-review
@@ -285,11 +286,10 @@ Payload JSON:
 
 ```
 {
-  "productId": "65c61c2bae1c0e887edfb901", // Ganti dengan ID produk yang valid
-  "userId": "6123456789abcdef01234567", // Ganti dengan ID pengguna yang valid
-  "rating": "5", // Nilai peringkat (misalnya, 1, 2, 3, 4, atau 5)
-  "review": "This is a great product!" // Ulasan tentang produk
+  "pId": "65ccc103d6460a623aa94ff9",
+  "rId": "65cdada4458c472d890c4a8f"
 }
+
 
 ```
 

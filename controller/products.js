@@ -280,77 +280,64 @@ class Product {
   }
 
   async postAddReview(req, res) {
-    let { pId, uId, rating, review } = req.body;
-    if (!pId || !rating || !review || !uId) {
-      return res.json({ error: "All filled must be required" });
-    } else {
-      let checkReviewRatingExists = await productModel.findOne({ _id: pId });
-      if (checkReviewRatingExists.pRatingsReviews.length > 0) {
-        checkReviewRatingExists.pRatingsReviews.map((item) => {
-          if (item.user === uId) {
-            return res.json({ error: "Your already reviewd the product" });
-          } else {
-            try {
-              let newRatingReview = productModel.findByIdAndUpdate(pId, {
-                $push: {
-                  pRatingsReviews: {
-                    review: review,
-                    user: uId,
-                    rating: rating,
-                  },
-                },
-              });
-              newRatingReview((err, result) => {
-                if (err) {
-                  console.log(err);
-                }
-                return res.json({ success: "Thanks for your review" });
-              });
-            } catch (err) {
-              return res.json({ error: "Cart product wrong" });
-            }
-          }
-        });
-      } else {
-        try {
-          let newRatingReview = productModel.findByIdAndUpdate(pId, {
-            $push: {
-              pRatingsReviews: { review: review, user: uId, rating: rating },
-            },
-          });
-          newRatingReview.exec((err, result) => {
-            if (err) {
-              console.log(err);
-            }
-            return res.json({ success: "Thanks for your review" });
-          });
-        } catch (err) {
-          return res.json({ error: "Cart product wrong" });
+    try {
+        let { pId, uId, rating, review } = req.body;
+        
+        // Validasi field yang diperlukan untuk ulasan
+        if (!pId || !rating || !review || !uId) {
+            return res.status(400).json({ error: "Semua bidang harus diisi: pId, uId, rating, review" });
         }
-      }
-    }
-  }
 
-  async deleteReview(req, res) {
-    let { rId, pId } = req.body;
-    if (!rId) {
-      return res.json({ message: "All filled must be required" });
-    } else {
-      try {
-        let reviewDelete = productModel.findByIdAndUpdate(pId, {
-          $pull: { pRatingsReviews: { _id: rId } },
+        let checkReviewRatingExists = await productModel.findOne({ _id: pId });
+
+        if (!checkReviewRatingExists) {
+            return res.json({ error: "Produk tidak ditemukan" });
+        }
+
+        const alreadyReviewed = checkReviewRatingExists.pRatingsReviews.some(item => item.user === uId);
+
+        if (alreadyReviewed) {
+            return res.json({ error: "Anda sudah memberikan ulasan untuk produk ini" });
+        }
+
+        checkReviewRatingExists.pRatingsReviews.push({
+            review: review,
+            user: uId,
+            rating: rating,
         });
-        reviewDelete.exec((err, result) => {
-          if (err) {
-            console.log(err);
-          }
-          return res.json({ success: "Your review is deleted" });
-        });
-      } catch (err) {
-        console.log(err);
-      }
+
+        await checkReviewRatingExists.save();
+
+        return res.json({ success: "Terima kasih atas ulasannya" });
+    } catch (error) {
+        console.error(error);
+        return res.json({ error: "Kesalahan server internal" });
     }
+}
+
+async deleteReview(req, res) {
+  const { rId, pId } = req.body;
+  if (!rId || !pId) {
+    return res.status(400).json({ error: "Both review ID and product ID are required" });
   }
+  
+  try {
+    const updatedProduct = await productModel.findByIdAndUpdate(
+      pId,
+      { $pull: { pRatingsReviews: { _id: rId } } },
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    return res.status(200).json({ success: "Review deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
 }
 
 const productController = new Product();
