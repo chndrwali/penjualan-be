@@ -23,7 +23,23 @@ class Auth {
       res.status(404);
     }
   }
-
+  
+  async getOwnProfile(req, res) {
+    try {
+      const user = await userModel.findById(req.userDetails._id);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      const token = jwt.sign(
+        { _id: user._id, role: user.userRole },
+        JWT_SECRET
+      );
+      return res.json({ user, token });
+    } catch (error) {
+      console.error("Error while fetching user profile:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
   /* User Registration/Signup controller  */
   async postSignup(req, res) {
     let { name, email, password, cPassword } = req.body;
@@ -71,7 +87,7 @@ class Auth {
                 email,
                 password,
                 // ========= Here role 1 for admin signup role 0 for customer signup =========
-                userRole: 1, // Field Name change to userRole from role
+                userRole: 0, // Field Name change to userRole from role
               });
               newUser
                 .save()
@@ -134,6 +150,7 @@ class Auth {
       }
     } catch (err) {
       console.log(err);
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 }
